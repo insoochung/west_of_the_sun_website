@@ -22,4 +22,5 @@ class Chapter(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
     generated_at = models.DateTimeField(null=True)
-    book = models.ForeignKey(Book, related_name='chapters')
+    book = models.ForeignKey(Book, related_name='chapters',
+                             on_delete=models.RESTRICT)
