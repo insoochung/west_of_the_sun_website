@@ -9,8 +9,8 @@ class Book(models.Model):
     description_prompt = models.TextField(blank=True)
     description_gen = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
-#    updated_by = models.ForeignKey(User, null=True, related_name='+')
+    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.SET_NULL, blank=True)
     generated_at = models.DateTimeField(null=True)
     
 class Chapter(models.Model):
@@ -22,7 +22,7 @@ class Chapter(models.Model):
     content_gen = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-#    updated_by = models.ForeignKey(User, null=True, related_name='+')
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.SET_NULL, blank=True)
     generated_at = models.DateTimeField(null=True)
     book = models.ForeignKey(Book, related_name='chapters',
                              on_delete=models.RESTRICT)
