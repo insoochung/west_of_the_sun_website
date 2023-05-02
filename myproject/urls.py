@@ -14,12 +14,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import re_path
 
+from django.urls import path, re_path
+from django.contrib import admin # ,include (Corey Schafer Tutorial Recommendation)
 from books import views
 
 urlpatterns = [
-    re_path(r'^$', views.home, name='home'),
-    re_path(r'^admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('admin/', admin.site.urls),
+    path('about/', views.about, name='about'),
+    path('about/company/', views.about_company, name='about_company'),
+    
+    path('book_detail/<int:id>', views.book_detail, name='book_detail'), # For rendering book views (according to original tutorials)
+
+    # Cory Schafer Tutorial Recommendation (For later versions of Django): path('books/', include('book.urls'))
+    # According to Cory Schafer: If you use an "include" function here like above, you do not need to add anything to the project URLs module
+    # Because once someone goes to a specific book route, the "include" function will chop off the part already matched and process the next string (has to create an additional book.url file)
+
+    
+    re_path(r'^(?P<username>[\w.@+-]+)/$', views.user_profile, name='user_profile'),
 ]
