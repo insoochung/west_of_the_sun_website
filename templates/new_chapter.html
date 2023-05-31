@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Start a New Chapter {% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Books</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'book_chapters' book.id %}">{{ book.title }}</a></li>
+  <li class="breadcrumb-item active">New Chapter</li>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_book_title">Book Title</label>
+      <input type="text" class="form-control" id="id_book_title" name="book_title">
+    </div>
+    <div class="form-group">
+      <label for="id_book_description">Book Description</label>
+      <textarea class="form-control" id="book_description" name="book_description" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Enter</button>
+  </form>
+{% endblock %}

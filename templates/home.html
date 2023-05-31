@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">Books</li>
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <thead class="thead-inverse">
+            <tr>
+                <th>Book</th>
+                <th>Chapters</th>
+                <th>Description</th>
+                <th>Last Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>
+                        <a href="{% url 'book_chapters' book.id %}">{{ book.title }}</a>
+                        <small class="text-muted d-block">{{ book.description }}</small>
+                    </td>
+                    <td class="align-middle">0</td>
+                    <td class="align-middle">0</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
