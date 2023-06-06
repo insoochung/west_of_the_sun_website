@@ -1,7 +1,19 @@
-<!--There is a thing called "Template Inheritance"-->
-<!--Repeated sections of HTML codes can be written here for more convenient management."-->
+<!-- Insoo: Put shared stuff here -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %} The Perpetual Book {% endblock %}</title>
 
-<!--
-    To let a child template to override a specific section in a parent template,
-        Use {% block something %}{% endblock%}
--->
+    {% load bootstrap5 %}
+    <!--  -->
+    {% bootstrap_css %}
+    <!--  -->
+    {% bootstrap_javascript %}
+  </head>
+  <body>
+    {% block content %}
+    <!-- Insoo: Define this part in other HTML files -->
+    {% endblock %}
+  </body>
+</html>

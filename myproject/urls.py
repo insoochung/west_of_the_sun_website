@@ -17,14 +17,14 @@ Including another URLconf
 
 from django.urls import path, re_path
 from django.contrib import admin # ,include (Corey Schafer Tutorial Recommendation)
+from accounts import views as accounts_views
 from books import views
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('about/', views.about, name='about'),
-    path('about/company/', views.about_company, name='about_company'),
-    
+    path('about/company/', views.about_company, name='about_company'),    
     path('book_detail/<int:id>', views.book_detail, name='book_detail'), # For rendering book views (according to original tutorials)
 
     # Cory Schafer Tutorial Recommendation (For later versions of Django): path('books/', include('book.urls'))
@@ -32,5 +32,8 @@ urlpatterns = [
     # Because once someone goes to a specific book route, the "include" function will chop off the part already matched and process the next string (has to create an additional book.url file)
 
     
-    re_path(r'^(?P<username>[\w.@+-]+)/$', views.user_profile, name='user_profile'),
+    # re_path(r'^(?P<username>[\w.@+-]+)/$', views.user_profile, name='user_profile'),
+
+    path('signup/', accounts_views.signup, name='signup')
+
 ]
