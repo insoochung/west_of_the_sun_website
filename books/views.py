@@ -29,4 +29,4 @@ def about_company(request):
 
 def user_profile(request):
     #return HttpResponse('<h1> User Profile Page Test </h1>') # for testing
-    return render(request, 'user_profile.html,')
+    return render(request, 'user_profile.html')
