@@ -12,7 +12,7 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.SET_NULL, blank=True)
     generated_at = models.DateTimeField(null=True)
-    
+
 class Chapter(models.Model):
     title = models.CharField(max_length=1024)
     title_prompt = models.CharField(max_length=1024)

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'books',
+    'books', # Everytime you create an app, you should include them here for Djanggo to correctly search the templates and modules in the DB.
 ]
 
 MIDDLEWARE = [
@@ -126,7 +126,10 @@ STATICFILES_DIRS =  [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+ROOT_URLCONF = 'myproject.urls'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#
