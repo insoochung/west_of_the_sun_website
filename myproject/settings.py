@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'widget_tweaks',
     'bootstrap5',
 
     'books', # Everytime you create an app, you should include them here for Djanggo to correctly search the templates and modules in the DB.
