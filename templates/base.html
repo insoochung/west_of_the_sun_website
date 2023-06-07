@@ -15,14 +15,19 @@
         <a class="navbar-brand" href="{% url 'home' %}">The Perpetual Book</a>
         <div class="dropdown">
           {% if user.is_authenticated %}
-          <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ user.username }}
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="#">My account</a></li>
-              <li><a class="dropdown-item" href="#">Change password</a></li>
+            
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.username }}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              {% if user.is_superuser %}
+              <li><a class="dropdown-item font-italic" href="#">Create a new book</a></li>
+              {% endif %}
+              <li><a class="dropdown-item" href="#">My account</a></li>
+              <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
-          </ul>
+            </ul>
+
           {% else %}
           <form class="form-inline ml-auto">
               <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log in</a>
