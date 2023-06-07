@@ -23,9 +23,9 @@ from django.contrib.auth import views as auth_views
 from books import views
 
 urlpatterns = [
-    # path('about/', views.about, name='about'),
-    # path('about/company/', views.about_company, name='about_company'),    
-    # path('book_detail/<int:id>', views.book_detail, name='book_detail'), # For rendering book views (according to original tutorials)
+    path('about/', views.about, name='about'),
+    path('about/company/', views.about_company, name='about_company'),    
+    path('book_detail/<int:id>', views.book_detail, name='book_detail'), # For rendering book views (according to original tutorials)
 
     # Cory Schafer Tutorial Recommendation (For later versions of Django): path('books/', include('book.urls'))
     # According to Cory Schafer: If you use an "include" function here like above, you do not need to add anything to the project URLs module
@@ -38,6 +38,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', accounts_views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout')
-
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
