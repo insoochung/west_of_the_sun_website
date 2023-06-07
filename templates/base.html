@@ -21,7 +21,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               {% if user.is_superuser %}
-              <li><a class="dropdown-item font-italic" href="#">Create a new book</a></li>
+              <li><a class="dropdown-item" style="color:red" href="#">Create a new book</a></li>
               {% endif %}
               <li><a class="dropdown-item" href="#">My account</a></li>
               <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>

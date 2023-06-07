@@ -15,6 +15,10 @@ def home(request):
     books = Book.objects.all()
     return render(request, 'home.html', {'books': books, 'user': request.user})
 
+def new_book(request, id):
+    book = get_object_or_404(Book, id=id)
+    return render(request, 'new_book.html', {'book': book})
+
 def book_detail(request, id):
     book = get_object_or_404(Book, id=id)
     return render(request, 'book_detail.html', {'book': book})

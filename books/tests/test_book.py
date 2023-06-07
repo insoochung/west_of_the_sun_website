@@ -3,10 +3,29 @@ from django.urls import reverse, resolve
 # 'resolve' is used to match a requested URL with a list of URLs listed in the urls.py module
 from django.test import TestCase
 
-from ..views import book_detail
+from ..views import book_detail, new_book
 from ..models import Book
 
-class BookDetailTests(TestCase):
+class NewBookTests(TestCase):
+    def setUp(self):
+        Book.objects.create(title="Test book", description="This is a test book")
+
+    def test_new_book_view_success_status_code(self):
+        url = reverse('new_book', kwargs={'id': 1})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+    
+    def test_new_book_view_not_found_status_code(self):
+        url = reverse('new_book', kwargs={'id': 99})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+    
+    def test_new_book_url_resolves_new_book_view(self):
+        view = resolve('/books/1/new')
+        self.assertEquals(view.func, new_book)
+
+
+class BookDetailViewTests(TestCase):
     def setUp(self):
         # use setUp to create an instance to use in the tests (needs revision)
         self.book = Book.objects.create(title='Django', description='Django book.')
@@ -15,7 +34,7 @@ class BookDetailTests(TestCase):
 
     def test_book_detail_view_success_status_code(self):
         # Returns a status code 200 (success) for an existing Book
-        url = reverse('book_detail', kwargs={'id': self.book.id}) #kwargs meaning key arguments
+        url = reverse('book_detail', kwargs={'id': self.book.id }) #kwargs meaning key arguments
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
