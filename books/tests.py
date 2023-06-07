@@ -6,10 +6,10 @@ from django.test import TestCase
 from .views import home, book_detail
 from .gpt_calls import call_gpt
 from .models import Book
-
 # Create your tests here.
 
 RUN_GPT_TESTS = False  # Set to True if you want to run GPT tests
+
 
 class HomeTests(TestCase):
     def test_home_view_status_code(self):
@@ -21,32 +21,7 @@ class HomeTests(TestCase):
         view = resolve('/')        
         self.assertEquals(view.func, home)  # for checking if the function associated with the view (view.func) is the home function.
 
-
-class BookDetailTests(TestCase):
-    def setUp(self):
-        # use setUp to create an instance to use in the tests (needs revision)
-        self.book = Book.objects.create(title='Django', description='Django book.')
-
-    def test_book_detail_view_success_status_code(self):
-        # Returns a status code 200 (success) for an existing Book
-        url = reverse('book_detail', kwargs={'id': self.book.id}) #kwargs meaning key arguments
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
-
-    def test_book_detail_view_not_found_status_code(self):
-        # Returns a status code 404 (page not found) for a Book that does not exist in the DB
-        non_existing_book_id = self.book.id + 1
-        url = reverse('book_detail', kwargs={'id':non_existing_book_id})
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 404)
-
-    def test_book_detail_url_resolves_book_chapters_view(self):
-        # Test if Django is using the correct view function to render the Chapters in a Book
-        view = resolve(f'/book_detail/{self.book.id}') # Use f-string to include the book ID
-        self.assertEquals(view.func, book_detail)
-
-
-
+        
 class GptTests(TestCase):
     def test_gpt_call(self):
         if not RUN_GPT_TESTS:
@@ -63,3 +38,32 @@ class GptTests(TestCase):
         # e.g. message can be "The 2020 World Series was played at Globe Life Field in Arlington, Texas."
         self.assertTrue("Arlington" in ret["choices"][0]["message"]["content"])
 
+
+class BookDetailTests(TestCase):
+    def setUp(self):
+        # use setUp to create an instance to use in the tests (needs revision)
+        self.book = Book.objects.create(title='Django', description='Django book.')
+
+    # Returns a status code 200 (success) for an existing Book
+
+    def test_book_detail_view_success_status_code(self):
+        # Returns a status code 200 (success) for an existing Book
+        url = reverse('book_detail', kwargs={'id': self.book.id}) #kwargs meaning key arguments
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    # Returns a status code 404 (page not found) for a Book that does not exist in the DB
+
+    def test_book_detail_view_not_found_status_code(self):
+        # Returns a status code 404 (page not found) for a Book that does not exist in the DB
+        non_existing_book_id = self.book.id + 1
+        url = reverse('book_detail', kwargs={'id':non_existing_book_id})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    # Test if Django is using the correct view function to render the Chapters in a Book
+
+    def test_book_detail_url_resolves_book_chapters_view(self):
+        # Test if Django is using the correct view function to render the Chapters in a Book
+        view = resolve(f'/book_detail/{self.book.id}') # Use f-string to include the book ID
+        self.assertEquals(view.func, book_detail)
