@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from .views import home, book_detail
 from .gpt_calls import call_gpt
+from .models import Book
 # Create your tests here.
 
 RUN_GPT_TESTS = False  # Set to True if you want to run GPT tests
