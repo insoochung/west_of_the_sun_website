@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404 # for returning rendered templates ASAP
-from django.views.generic import View, UpdateView
+from django.views.generic import View, UpdateView, DeleteView
 from django.utils import timezone
 
 import openai
@@ -73,4 +73,9 @@ class UpdateBookView(UpdateView):
         book.updated_by = self.request.user
         book.updated_at = timezone.now()
         book.save()
-        return render(self.request, 'update_book.html', {'form': form})
+        return render(self.request, 'update_book.html', {'form': UpdateBookForm(instance=book) })
+
+class DeleteBookView(DeleteView):
+    model = Book
+    success_url = "/"
+    template_name = "delete_book.html"
