@@ -24,6 +24,7 @@ from books import views
 
 urlpatterns = [
     path('books/new', views.NewBookView.as_view(), name="new_book"),
+    path('books/<int:pk>/update', views.UpdateBookView.as_view(), name="update_book"),
 
     path('about/', views.about, name='about'),
     path('about/company/', views.about_company, name='about_company'),    

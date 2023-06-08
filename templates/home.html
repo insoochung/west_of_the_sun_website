@@ -14,7 +14,7 @@
                     <p class="card-text text-truncate" >
                         {{ book.description }}
                     </p>
-                    <a href="#" class="btn btn-outline-secondary">Edit</a>
+                    <a href="{% url 'update_book' book.id %}" class="btn btn-outline-secondary">Edit</a>
                 </div>
                 </div>
             </div>

@@ -1,11 +1,10 @@
-from django import forms
 from django.shortcuts import redirect, render, get_object_or_404 # for returning rendered templates ASAP
-from django.views.generic import View
+from django.views.generic import View, UpdateView
 
 import openai
 
 from .models import Book
-from .forms import NewBookForm
+from .forms import NewBookForm, UpdateBookForm
 from .gpt_calls import call_gpt_write_book
 
     # "render" function takes the request object as its first argument
@@ -21,24 +20,6 @@ def home(request):
     books = Book.objects.all()
     return render(request, 'home.html', {'books': books, 'user': request.user})
 
-# def new_book(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         form = NewBookForm(request.POST)
-#         if form.is_valid():
-#             book = form.save(commit=False)
-
-#             try:
-#                 book = call_gpt_write_book(user, book)
-#             except openai.InvalidRequestError as e:
-#                 form.add_error(None, f'[API error]\n{e}')
-
-#             if form.is_valid():
-#                 book.save()
-#                 return redirect('home')
-#     else:
-#         form = NewBookForm()
-#     return render(request, 'new_book.html', {'form': form})
 
 def book_detail(request, id):
     book = get_object_or_404(Book, id=id)
@@ -64,11 +45,11 @@ class NewBookView(View):
         user = request.user
         self.form = NewBookForm(request.POST)
         if self.form.is_valid():
-            book = self.form.save(commit=False)
             try:
-                book = call_gpt_write_book(user, book)
+                book = self.form.save(user=user, commit=False)
             except openai.InvalidRequestError as e:
-                self.form.add_error("gpt_name", f'[API error]\n{e}')            
+                self.form.add_error("gpt_name", f'[API error]\n{e}')
+            
             if self.form.is_valid():
                 book.save()
                 return redirect('home')
@@ -80,5 +61,15 @@ class NewBookView(View):
         return self.render(request)
 
 
-     
- 
+class UpdateBookView(UpdateView):
+    model = Book
+    form_class = UpdateBookForm
+    template_name = "update_book.html"
+    context_object_name = "book"
+    
+    def form_valid(self, form):
+        book = form.save(self.request.user, commit=False)
+        # book.updated_by = self.request.user
+        # book.updated_at = timezone.now()
+        book.save()
+        return render(self.request, 'update_book.html', {'form': form})
