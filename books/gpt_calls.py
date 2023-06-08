@@ -14,7 +14,8 @@ openai.api_key_path = f"{os.path.dirname(__file__) }/.openaikey"
 def call_gpt(system_prompt,
              conv_init_role,
              dialog,
-             model="gpt-3.5-turbo"):
+             model="gpt-3.5-turbo",
+             message_only=False):
     """ Call GPT
     Args:
         - system_prompt: sets the tone for the system
@@ -40,6 +41,8 @@ def call_gpt(system_prompt,
         model=model,
         messages=messages
     )
+    if message_only:
+        return ret["choices"][0]["message"]["content"]
     return ret
 
 

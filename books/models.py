@@ -3,16 +3,14 @@ from django.contrib.auth.models import User
 
 class Book(models.Model):
     title = models.CharField(max_length=1024)
-    title_prompt = models.CharField(max_length=1024, blank=True)
-    title_gen = models.CharField(max_length=8192, blank=True)
-    description = models.TextField()
-    description_prompt = models.TextField(blank=True)
-    description_gen = models.TextField(blank=True)
+    gpt_name = models.CharField(max_length=1024)
+    meta_prompt = models.TextField()
+    initial_prompt = models.TextField()
+    description = models.TextField(blank=True)
+    conversation = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.SET_NULL, blank=True)
-    generated_at = models.DateTimeField(null=True)
-
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True)
+    
 class Chapter(models.Model):
     title = models.CharField(max_length=1024)
     title_prompt = models.CharField(max_length=1024)

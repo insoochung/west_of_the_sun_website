@@ -1,26 +1,32 @@
 <!-- Insoo: Load universal stuff here -->
 {% extends 'base.html' %}
 {% load static %}
+<!-- <style>
+.text-truncate-container p {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style> -->
 
 {% block content %}
-<h1>Books</h1>
-
-<table boarder="1">
-    <thead>
-        <tr>
-            <th>Book</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="container">
+    <div class="text-center"><h1>Books</h1> </div>
+    <div class="row">
         {% for book in books %}
-            <tr>
-                <td>{{book.title}}</td>
-                <td>
-                    <small style="color:black">{{book.description}}</small>
-                </td>
-            </tr>
+            <div class="col-sm-12 text-center">
+                <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="#">{{ book.title }}</a></h5>
+                    <p class="card-text text-truncate" >
+                        {{ book.description }}
+                    </p>
+                    <a href="#" class="btn btn-outline-secondary">Edit</a>
+                </div>
+                </div>
+            </div>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+</div>
 {% endblock %}

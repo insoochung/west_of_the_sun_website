@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404 # for returning rendered templates ASAP
-from .models import Book, Chapter
-from django.http import HttpResponse # for testing only, delete later
+from django.shortcuts import redirect, render, get_object_or_404 # for returning rendered templates ASAP
+
+from .models import Book
+from .forms import NewBookForm
+from .gpt_calls import call_gpt
 
     # "render" function takes the request object as its first argument
     # "render" function takes the template name as its second argument
@@ -15,9 +17,23 @@ def home(request):
     books = Book.objects.all()
     return render(request, 'home.html', {'books': books, 'user': request.user})
 
-def new_book(request, id):
-    book = get_object_or_404(Book, id=id)
-    return render(request, 'new_book.html', {'book': book})
+def new_book(request):
+    user = request.user
+    if request.method == 'POST':
+        form = NewBookForm(request.POST)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.description = call_gpt(system_prompt=book.meta_prompt,
+                                        conv_init_role="user",
+                                        dialog=[book.initial_prompt],
+                                        model=book.gpt_name,
+                                        message_only=True)
+            book.created_by = user
+            book.save()
+            return redirect('home')
+    else:
+        form = NewBookForm()
+    return render(request, 'new_book.html', {'form': form})
 
 def book_detail(request, id):
     book = get_object_or_404(Book, id=id)
