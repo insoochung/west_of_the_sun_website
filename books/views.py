@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404 # for returning rendered templates ASAP
-from django.views.generic import View, UpdateView, DeleteView
+from django.views.generic import View, UpdateView, DeleteView, DetailView
 from django.utils import timezone
 
 import openai
@@ -79,3 +79,7 @@ class DeleteBookView(DeleteView):
     model = Book
     success_url = "/"
     template_name = "delete_book.html"
+
+class BookView(DetailView):
+    model = Book
+    template_name = "browse_book.html"

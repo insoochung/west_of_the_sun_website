@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %} Update book {% endblock %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <p class="text-end">
+                    <a href="{% url 'update_book' book.id %}" class="btn btn-light btn-sm">Edit</a>
+                    <a href="{% url 'delete_book' book.id %}" class="btn btn-warning btn-sm">Delete</a>
+                </p>
+                <h3 class="card-title">{{ object.title }}</h3> <br/>
+                <p class="card-text text-end text-muted">
+                    <small>
+                        Created by {{ object.created_by.username|title }} {{ book.created_at|timesince }} ago <br/>
+                        {% if object.updated_by %}
+                            Updated by {{ object.updated_by.username|title }} {{ book.updated_by|timesince }} ago
+                        {% endif %}
+                    </small>
+                </p>
+                <p class="text-justify">{{ object.description|linebreaks }}</p>
+            </div>
+            {% if user.is_superuser %}
+            <div id="accordion">
+                <div class="card-footer text-muted">
+                    <p class="card-title text-center">Admin's eyes only</p>
+                    <small>
+                        <div class="card">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>GPT name</strong>: {{ object.gpt_name }} </li>
+                                <li class="list-group-item"><strong>Meta prompt</strong>: {{ object.meta_prompt }} </li>
+                                <li class="list-group-item"><strong>Initial prompt</strong>: {{ object.initial_prompt }} </li>
+                                <li class="list-group-item"><strong>Outline prompt</strong>: {{ object.outline_prompt }} </li>
+                                <li class="list-group-item"><strong>Outline</strong>: <br/> {{ object.outline|linebreaks }} </li>
+                            </ul>
+
+                    </div>
+                    </small>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}
