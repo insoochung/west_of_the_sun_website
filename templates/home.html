@@ -1,14 +1,6 @@
 <!-- Insoo: Load universal stuff here -->
 {% extends 'base.html' %}
 {% load static %}
-<!-- <style>
-.text-truncate-container p {
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-</style> -->
 
 {% block content %}
 <div class="container">
@@ -18,7 +10,7 @@
             <div class="col-sm-12 text-center">
                 <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><a href="#">{{ book.title }}</a></h5>
+                    <h5 class="card-title text-truncate"><a href="#">{{ book.title }}</a></h5>
                     <p class="card-text text-truncate" >
                         {{ book.description }}
                     </p>

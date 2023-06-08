@@ -6,8 +6,9 @@ class Book(models.Model):
     gpt_name = models.CharField(max_length=1024)
     meta_prompt = models.TextField()
     initial_prompt = models.TextField()
+    outline_prompt = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    conversation = models.TextField(blank=True)
+    outline = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True)
     

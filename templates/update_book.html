@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} New book {% endblock %}
+{% block title %} Update book {% endblock %}
 
 
 {% block content %}
@@ -14,12 +14,12 @@
                 {% include 'includes/form.html' %}
                 <br>
                 <div id="submit_button_group" class="d-grid gap-2">
-                    <button id="submit_button" type="submit" class="btn btn-outline-primary">Create</button>
+                    <button id="submit_button" type="submit" class="btn btn-outline-primary">Update</button>
                 </div>
 
                 <div id="loading_button_group" class="d-grid gap-2" hidden>
                     <button id="loading_button" type="submit" class="btn btn-outline-primary" disabled hidden>
-                        <span class="sr-only">Generating...</span>
+                        <span class="sr-only">Updating...</span>
                         <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                     </button>
                 </div>
