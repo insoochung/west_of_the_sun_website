@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'widget_tweaks',
+
     'books', # Everytime you create an app, you should include them here for Djanggo to correctly search the templates and modules in the DB.
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -120,7 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS =  [
     os.path.join(BASE_DIR, 'static'),
@@ -132,4 +135,8 @@ ROOT_URLCONF = 'myproject.urls'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -1,30 +1,26 @@
-{% load static %}<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Books</title>
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    </head>
-    <body>
-        <h1>Books</h1>
+<!-- Insoo: Load universal stuff here -->
+{% extends 'base.html' %}
+{% load static %}
 
-        <table boarder="1">
-            <thead>
-                <tr>
-                    <th>Book</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for book in books %}
-                    <tr>
-                        <td>{{book.title}}</td>
-                        <td>
-                            <small style="color:black">{{book.description}}</small>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </body>
-</html>
+{% block content %}
+<h1>Books</h1>
+
+<table boarder="1">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{book.title}}</td>
+                <td>
+                    <small style="color:black">{{book.description}}</small>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

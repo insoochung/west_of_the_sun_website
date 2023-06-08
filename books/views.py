@@ -13,7 +13,7 @@ def home(request):
     #"request" is an object that Django automatically gives you, filled with details about the user's visit
     
     books = Book.objects.all()
-    return render(request, 'home.html', {'books': books})
+    return render(request, 'home.html', {'books': books, 'user': request.user})
 
 def book_detail(request, id):
     book = get_object_or_404(Book, id=id)
