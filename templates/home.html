@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="container">
-    <div class="text-center"><h1>Books</h1> </div>
     
     <div class="row row-cols-1 row-cols-md-3">
     {% for book in books %}
@@ -16,9 +15,10 @@
                 <p class="card-subtitle mb-2 text-muted" >
                     {{ book.description|truncatechars:128 }}
                 </p>
-                <a href="{% url 'update_book' book.id %}" class="btn btn-light btn-sm">Edit</a>
-                <a href="{% url 'delete_book' book.id %}" class="btn btn-warning btn-sm">Delete</a>
-
+                {% if user.is_superuser %}
+                    <a href="{% url 'update_book' book.id %}" class="btn btn-light btn-sm">Edit</a>
+                    <a href="{% url 'delete_book' book.id %}" class="btn btn-warning btn-sm">Delete</a>
+                {% endif %}
             </div>
             <div class="card-footer">
                 <p class="card-text">

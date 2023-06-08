@@ -8,10 +8,12 @@
     <div class="col-lg-8 col-md-10 col-sm-12">
         <div class="card">
             <div class="card-body">
-                <p class="text-end">
-                    <a href="{% url 'update_book' book.id %}" class="btn btn-light btn-sm">Edit</a>
-                    <a href="{% url 'delete_book' book.id %}" class="btn btn-warning btn-sm">Delete</a>
-                </p>
+                {% if user.is_superuser %}
+                    <p class="text-end">
+                        <a href="{% url 'update_book' book.id %}" class="btn btn-light btn-sm">Edit</a>
+                        <a href="{% url 'delete_book' book.id %}" class="btn btn-warning btn-sm">Delete</a>
+                    </p>
+                {% endif %}
                 <h3 class="card-title">{{ object.title }}</h3> <br/>
                 <p class="card-text text-end text-muted">
                     <small>
@@ -26,19 +28,24 @@
             {% if user.is_superuser %}
             <div id="accordion">
                 <div class="card-footer text-muted">
-                    <p class="card-title text-center">Admin's eyes only</p>
-                    <small>
-                        <div class="card">
+                    <p class="card-title text-center">
+                        <a class="btn btn-warning" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Admin's eyes only
+                        </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>GPT name</strong>: {{ object.gpt_name }} </li>
-                                <li class="list-group-item"><strong>Meta prompt</strong>: {{ object.meta_prompt }} </li>
-                                <li class="list-group-item"><strong>Initial prompt</strong>: {{ object.initial_prompt }} </li>
-                                <li class="list-group-item"><strong>Outline prompt</strong>: {{ object.outline_prompt }} </li>
-                                <li class="list-group-item"><strong>Outline</strong>: <br/> {{ object.outline|linebreaks }} </li>
+                                    <small>
+                                    <li class="list-group-item"><strong>GPT name</strong>: {{ object.gpt_name }} </li>
+                                    <li class="list-group-item"><strong>Meta prompt</strong>: {{ object.meta_prompt }} </li>
+                                    <li class="list-group-item"><strong>Initial prompt</strong>: {{ object.initial_prompt }} </li>
+                                    <li class="list-group-item"><strong>Outline prompt</strong>: {{ object.outline_prompt }} </li>
+                                    <li class="list-group-item"><strong>Outline</strong>: <br/> {{ object.outline|linebreaks }} </li>
+                                </small>
                             </ul>
-
+                        </div>
                     </div>
-                    </small>
                 </div>
             </div>
             {% endif %}
