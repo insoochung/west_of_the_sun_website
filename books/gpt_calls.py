@@ -26,6 +26,9 @@ def call_gpt_write_book(user, book):
                                         book.outline_prompt],
                                 model=book.gpt_name,
                                 message_only=True)
+    else:
+        book.outline = ""
+
     return book
 
 def call_gpt(system_prompt,

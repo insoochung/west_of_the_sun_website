@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404 # for returning rendered templates ASAP
 from django.views.generic import View, UpdateView
+from django.utils import timezone
 
 import openai
 
@@ -69,7 +70,7 @@ class UpdateBookView(UpdateView):
     
     def form_valid(self, form):
         book = form.save(self.request.user, commit=False)
-        # book.updated_by = self.request.user
-        # book.updated_at = timezone.now()
+        book.updated_by = self.request.user
+        book.updated_at = timezone.now()
         book.save()
         return render(self.request, 'update_book.html', {'form': form})
