@@ -1,6 +1,9 @@
 """ Based on: https://platform.openai.com/docs/guides/chat/introduction """
 
+import errno
 import os
+import signal
+import functools
 import openai  # venv에 pip install openai로 설치
 
 # key: https://platform.openai.com/account/api-keys 여기서
@@ -8,13 +11,31 @@ import openai  # venv에 pip install openai로 설치
 openai.api_key_path = f"{os.path.dirname(__file__) }/.openaikey"
 
 
-# def call_gpt_write_chapter(chapter, model):
-#     pass
+def call_gpt_write_book(user, book):
+    book.created_by = user
+    book.description = call_gpt(system_prompt=book.meta_prompt,
+                                conv_init_role="user",
+                                dialog=[book.initial_prompt],
+                                model=book.gpt_name,
+                                message_only=True)
+    if book.outline_prompt:
+        book.outline = call_gpt(system_prompt=book.meta_prompt,
+                                conv_init_role="user",
+                                dialog=[book.initial_prompt,
+                                        book.description,
+                                        book.outline_prompt],
+                                model=book.gpt_name,
+                                message_only=True)
+    else:
+        book.outline = ""
+
+    return book
 
 def call_gpt(system_prompt,
              conv_init_role,
              dialog,
-             model="gpt-3.5-turbo"):
+             model="gpt-3.5-turbo",
+             message_only=False):
     """ Call GPT
     Args:
         - system_prompt: sets the tone for the system
@@ -40,6 +61,8 @@ def call_gpt(system_prompt,
         model=model,
         messages=messages
     )
+    if message_only:
+        return ret["choices"][0]["message"]["content"]
     return ret
 
 
