@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 import openai
 
 from .models import Book, Chapter
-from .forms import NewBookForm, UpdateBookForm, NewChapterForm
+from .forms import NewBookForm, UpdateBookForm, NewChapterForm, UpdateChapterForm
 from .gpt_calls import call_gpt_write_book
 
     # "render" function takes the request object as its first argument
@@ -119,3 +119,18 @@ class DeleteChapterView(DeleteView):
     def get_success_url(self):
         return self.request.POST.get('next', '/')
 
+
+class UpdateChapterView(UpdateView):
+    model = Chapter
+    form_class = UpdateChapterForm
+    template_name = "update_chapter.html"
+    context_object_name = "chapter"
+    
+    def form_valid(self, form):
+        book = Chapter.objects.get(id=self.kwargs["pk"]).book
+        chapter = form.save(self.request.user, book, commit=False)
+        chapter.updated_by = self.request.user
+        chapter.updated_at = timezone.now()
+        chapter.save()
+        next = self.request.POST.get('next', '/')
+        return HttpResponseRedirect(next)

@@ -49,7 +49,7 @@
                             {% if user.is_superuser %}
                                 <small>
                                     <div class="text-end">
-                                        <a class="btn btn-sm btn-light">Edit</a>
+                                        <a class="btn btn-sm btn-light" href="{% url 'update_chapter' chapter.id %}?next={{ request.path|urlencode }}">Edit</a>
                                         <a class="btn btn-sm btn-light" href="{% url 'delete_chapter' chapter.id %}?next={{ request.path|urlencode }}">Delete</a>
                                     </div>
                                 </small>

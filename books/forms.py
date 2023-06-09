@@ -11,11 +11,11 @@ GPT_NAME_FIELD = forms.CharField(
 class NewBookForm(forms.ModelForm):
     title = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=1024,
                             help_text="Title of the book (not provided to GPT)")
-    meta_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 7}), max_length=8192,
+    meta_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 7}), max_length=65536,
                                   help_text="This is fed to GPT as context")
-    initial_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=8192,
+    initial_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=65536,
                                      help_text="Initial prompt for description creation")
-    outline_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=8192,
+    outline_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=65536,
                                      help_text="Prompt GPT for outline of the book (optional)",
                                      required=False)
     gpt_name = GPT_NAME_FIELD
@@ -33,10 +33,10 @@ class NewBookForm(forms.ModelForm):
 
 class UpdateBookForm(NewBookForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'readonly': 'readonly'}),
-                                  max_length=8192,
+                                  max_length=65536,
                                   help_text="GPT-generated description")
     outline = forms.CharField(widget=forms.Textarea(attrs={'readonly': 'readonly'}),
-                              max_length=8192,
+                              max_length=65536,
                               help_text="GPT-generated outline",
                               required=False)
 
@@ -48,7 +48,7 @@ class NewChapterForm(forms.ModelForm):
     chapter_number = forms.IntegerField(help_text="Chapters in a book will be sorted by this number")
     title = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=1024,
                             help_text="Title of the chapter (not provided to GPT)")
-    chapter_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=8192,
+    chapter_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=65536,
                                      help_text="Initial prompt for content creation")
     gpt_name = GPT_NAME_FIELD
 
@@ -62,3 +62,19 @@ class NewChapterForm(forms.ModelForm):
         if commit:
             chapter.save()
         return chapter
+
+class UpdateChapterForm(NewChapterForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={'readonly': 'readonly'}),
+                              max_length=65536,
+                              help_text="GPT-generated content")
+    revise_prompt = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), max_length=65536,
+                                    help_text="Follow up prompt for chapter revision")
+    revised_content = forms.CharField(widget=forms.Textarea(attrs={'readonly': 'readonly'}),
+                                      max_length=65536,
+                                      help_text="GPT-revised content based on the follow up revise prompt - overrides content if available.",
+                                      required=False)
+    gpt_name = GPT_NAME_FIELD
+
+    class Meta:
+        model = Chapter
+        fields = ('gpt_name', 'chapter_number', 'title', 'chapter_prompt', 'content', 'revise_prompt', 'revised_content')
