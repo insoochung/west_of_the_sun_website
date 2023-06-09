@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render, get_object_or_404 # for returning rendered templates ASAP
 from django.views.generic import View, UpdateView, DeleteView, DetailView
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 
 import openai
 
-from .models import Book
+from .models import Book, Chapter
 from .forms import NewBookForm, UpdateBookForm, NewChapterForm
 from .gpt_calls import call_gpt_write_book
 
@@ -101,10 +102,20 @@ class NewChapterView(View):
             
             if self.form.is_valid():
                 chapter.save()
-                return redirect(f'/books/{book.id}')
+                next = request.POST.get('next', '/')
+                return HttpResponseRedirect(next)
             
         return self.render(request)
 
     def get(self, request, pk):
         self.form = NewChapterForm()
         return self.render(request, pk)
+
+
+class DeleteChapterView(DeleteView):
+    model = Chapter
+    template_name = "delete_chapter.html"
+
+    def get_success_url(self):
+        return self.request.POST.get('next', '/')
+

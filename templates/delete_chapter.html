@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Delete book {% endblock %}
+{% block title %} Delete chapter {% endblock %}
 
 
 {% block content %}
@@ -8,10 +8,11 @@
     <div class="col-lg-8 col-md-10 col-sm-12">
         <div class="card">
             <div class="card-body">
-            <h3 class="card-title">Are you sure you want to delete "{{ object.title }}"?</h3>
+            <h3 class="card-title">Are you sure you want to delete chapter "{{ object.title }}"?</h3>
             <form method="post" novalidate>
                 {% csrf_token %}
                 <br>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
                 <div id="submit_button_group" class="d-grid gap-2">
                     <button id="submit_button" type="submit" class="btn btn-danger">Delete</button>
                 </div>

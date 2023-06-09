@@ -28,10 +28,9 @@
                 <p class="text-justify">{{ object.description|linebreaks }}</p>
                 <hr/>
                 <div class="text-end">
-                    <a href="{% url 'new_chapter' book.id %}" class="btn btn-link btn-sm">Add a new chapter</a>
+                    <a href="{% url 'new_chapter' book.id %}?next={{ request.path|urlencode }}" class="btn btn-link btn-sm">Add a new chapter</a>
                 </div>
                 <h4 class="text-center">Chapters</h4>
-                <!-- TODO: Iterate through chapters -->
                 {% for chapter in book.chapter_set.all|dictsort:"chapter_number" %}
                 <div class="text-center">
                     <a class="btn btn-link" data-bs-toggle="collapse" href="#chapter{{ chapter.chapter_number }}-collapse" role="button" aria-expanded="false" aria-controls="chapter{{ chapter.chapter_number }}-collapse">
@@ -49,7 +48,7 @@
                             <small>
                                 <div class="text-end">
                                     <a class="btn btn-sm btn-light">Edit</a>
-                                    <a class="btn btn-sm btn-light">Delete</a>
+                                    <a class="btn btn-sm btn-light" href="{% url 'delete_chapter' chapter.id %}?next={{ request.path|urlencode }}">Delete</a>
                                 </div>
                             </small>
                         {% endif %}

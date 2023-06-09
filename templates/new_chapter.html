@@ -8,13 +8,14 @@
     <div class="col-lg-8 col-md-10 col-sm-12">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">{{ book.title }}</h3>
+                <h4 class="card-title"><a href="{% url 'browse_book' book.id %}">{{ book.title }}</a></h4>
                 <hr/>
                 <h4>New chapter</h4>
                 <form method="post" novalidate>
                     {% csrf_token %}
-                    {% include 'includes/form.html' %}
+                    {% include 'includes/form.html' %}                    
                     <br>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div id="submit_button_group" class="d-grid gap-2">
                         <button id="submit_button" type="submit" class="btn btn-outline-primary">Create</button>
                     </div>
