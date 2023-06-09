@@ -1,15 +1,22 @@
 """ Based on: https://platform.openai.com/docs/guides/chat/introduction """
-
-import errno
 import os
-import signal
-import functools
 import openai  # venv에 pip install openai로 설치
 
 # key: https://platform.openai.com/account/api-keys 여기서
 # key file은 항상 books/ 디렉터리에 만들어 넣기 - books/.openaikey
 openai.api_key_path = f"{os.path.dirname(__file__) }/.openaikey"
 
+
+def call_gpt_write_chapter(user, book, chapter):
+    chapter.created_by = user
+    chapter.book = book
+    chapter.content = call_gpt(system_prompt=book.meta_prompt,
+                               conv_init_role="user",
+                               dialog=[chapter.chapter_prompt],
+                               model=chapter.gpt_name,
+                               message_only=True)
+
+    return chapter
 
 def call_gpt_write_book(user, book):
     book.created_by = user

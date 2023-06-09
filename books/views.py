@@ -5,7 +5,7 @@ from django.utils import timezone
 import openai
 
 from .models import Book
-from .forms import NewBookForm, UpdateBookForm
+from .forms import NewBookForm, UpdateBookForm, NewChapterForm
 from .gpt_calls import call_gpt_write_book
 
     # "render" function takes the request object as its first argument
@@ -83,3 +83,28 @@ class DeleteBookView(DeleteView):
 class BookView(DetailView):
     model = Book
     template_name = "browse_book.html"
+
+class NewChapterView(View):
+    def render(self, request, pk):
+        return render(request, 'new_chapter.html',
+                      {'form': self.form, 'book': Book.objects.get(id=pk)})
+    
+    def post(self, request, pk):
+        user = request.user
+        self.form = NewChapterForm(request.POST)
+        book = Book.objects.get(id=pk)
+        if self.form.is_valid():
+            try:
+                chapter = self.form.save(user=user, book=book, commit=False)
+            except openai.InvalidRequestError as e:
+                self.form.add_error("gpt_name", f'[API error]\n{e}')
+            
+            if self.form.is_valid():
+                chapter.save()
+                return redirect(f'/books/{book.id}')
+            
+        return self.render(request)
+
+    def get(self, request, pk):
+        self.form = NewChapterForm()
+        return self.render(request, pk)
