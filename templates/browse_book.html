@@ -6,48 +6,83 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10 col-sm-12">
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-body">
                 {% if user.is_superuser %}
                     <p class="text-end">
-                        <a href="{% url 'update_book' book.id %}" class="btn btn-light btn-sm">Edit</a>
-                        <a href="{% url 'delete_book' book.id %}" class="btn btn-warning btn-sm">Delete</a>
+                        <a href="{% url 'update_book' object.id %}" class="btn btn-light btn-sm">Edit</a>
+                        <a href="{% url 'delete_book' object.id %}" class="btn btn-warning btn-sm">Delete</a>
                     </p>
                 {% endif %}
                 <h3 class="card-title">{{ object.title }}</h3> <br/>
                 <p class="card-text text-end text-muted">
                     <small>
-                        Created by {{ object.created_by.username|title }} {{ book.created_at|timesince }} ago <br/>
+                        Created by {{ object.created_by.username|title }} {{ object.created_at|timesince }} ago <br/>
                         {% if object.updated_by %}
-                            Updated by {{ object.updated_by.username|title }} {{ book.updated_by|timesince }} ago
+                            Updated by {{ object.updated_by.username|title }} {{ object.updated_by|timesince }} ago
                         {% endif %}
                     </small>
                 </p>
+                <hr/>
+                <h5 class="text-center">About</h5>
                 <p class="text-justify">{{ object.description|linebreaks }}</p>
-            </div>
-            {% if user.is_superuser %}
-            <div id="accordion">
-                <div class="card-footer text-muted">
-                    <p class="card-title text-center">
-                        <a class="btn btn-warning" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            Admin's eyes only
+                <hr/>
+                <div class="text-end">
+                    <a href="{% url 'new_chapter' object.id %}?next={{ request.path|urlencode }}" class="btn btn-link btn-sm">Add a new chapter</a>
+                </div>
+                
+                <!-- Chapters within the book -->
+                <h4 class="text-center">Chapters</h4>
+                {% for chapter in object.chapter_set.all|dictsort:"chapter_number" %}
+                    <div class="text-center">
+                        <a class="btn btn-link" data-bs-toggle="collapse" href="#chapter{{ chapter.chapter_number }}-collapse" role="button" aria-expanded="false" aria-controls="chapter{{ chapter.chapter_number }}-collapse">
+                            <h5><strong>Chapter {{ chapter.chapter_number }}.</strong> {{ chapter.title }}</h5>
                         </a>
-                    </p>
-                    <div class="collapse" id="collapseExample">
-                        <div class="card card-body">
-                            <ul class="list-group list-group-flush">
-                                    <small>
-                                    <li class="list-group-item"><strong>GPT name</strong>: {{ object.gpt_name }} </li>
-                                    <li class="list-group-item"><strong>Meta prompt</strong>: {{ object.meta_prompt }} </li>
-                                    <li class="list-group-item"><strong>Initial prompt</strong>: {{ object.initial_prompt }} </li>
-                                    <li class="list-group-item"><strong>Outline prompt</strong>: {{ object.outline_prompt }} </li>
-                                    <li class="list-group-item"><strong>Outline</strong>: <br/> {{ object.outline|linebreaks }} </li>
+                    </div>
+                    <div class="collapse" id="chapter{{ chapter.chapter_number }}-collapse">
+                        <div class="card card-body text-justify">
+                            {% if chapter.revised_content %}
+                                {{ chapter.revised_content|linebreaks }}
+                            {% else %}
+                                {{ chapter.content|linebreaks }}
+                            {% endif %}
+                            {% if user.is_superuser %}
+                                <small>
+                                    <div class="text-end">
+                                        <a class="btn btn-sm btn-light" href="{% url 'update_chapter' chapter.id %}?next={{ request.path|urlencode }}">Edit</a>
+                                        <a class="btn btn-sm btn-light" href="{% url 'delete_chapter' chapter.id %}?next={{ request.path|urlencode }}">Delete</a>
+                                    </div>
                                 </small>
-                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- If user is admin, provide all information of the book including the prompt -->
+            {% if user.is_superuser %}
+                <div id="accordion">
+                    <div class="card-footer text-muted">
+                        <p class="card-title text-center">
+                            <a class="btn btn-outline-warning" data-bs-toggle="collapse" href="#footer-collapse" role="button" aria-expanded="false" aria-controls="footer-collapse">
+                                Additional book information
+                            </a>
+                        </p>
+                        <div class="collapse" id="footer-collapse">
+                            <div class="card card-body">
+                                <ul class="list-group list-group-flush">
+                                        <small>
+                                        <li class="list-group-item"><strong>GPT name</strong>: {{ object.gpt_name }} </li>
+                                        <li class="list-group-item"><strong>Meta prompt</strong>: {{ object.meta_prompt }} </li>
+                                        <li class="list-group-item"><strong>Initial prompt</strong>: {{ object.initial_prompt }} </li>
+                                        <li class="list-group-item"><strong>Outline prompt</strong>: {{ object.outline_prompt }} </li>
+                                        <li class="list-group-item"><strong>Outline</strong>: <br/> {{ object.outline|linebreaks }} </li>
+                                    </small>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             {% endif %}
         </div>
         

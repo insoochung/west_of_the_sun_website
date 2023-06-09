@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} Update book {% endblock %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+            <h3 class="card-title"><a href="{% url 'browse_book' chapter.book.id %}">{{ chapter.book.title }}</a></h3>
+            <hr/>
+            <h4>Update chapter</h4>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% include 'includes/form.html' %}
+                <br>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                <div id="submit_button_group" class="d-grid gap-2">
+                    <button id="submit_button" type="submit" class="btn btn-outline-primary">Update</button>
+                </div>
+
+                <div id="loading_button_group" class="d-grid gap-2" hidden>
+                    <button id="loading_button" type="submit" class="btn btn-outline-primary" disabled hidden>
+                        <span class="sr-only">Updating...</span>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Disable submit button when clicked
+    $('#submit_button').click(function(e){
+        $('#submit_button_group').attr('hidden', true)
+        $('#submit_button').attr('hidden', true)
+        $('#loading_button_group').removeAttr('hidden')
+        $('#loading_button').removeAttr('hidden')
+    });
+</script>
+{% endblock %}
